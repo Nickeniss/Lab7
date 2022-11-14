@@ -18,13 +18,20 @@ public class UserDB {
 
     public List<User> getAll() throws Exception {
         List<User> users = new ArrayList<>();
-        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        
+        EntityManager em = null;
+        
         try {
+            em = DBUtil.getEmFactory().createEntityManager();
             users = em.createNamedQuery("User.findAll",
                     User.class).getResultList();
-            return users;
+            
+        } catch (Exception ex) {
+            System.out.println(ex);
         } finally {
-            em.close();
+            if (em != null)
+                em.close();  
+            return users;
         }
     }
 
@@ -43,7 +50,7 @@ public class UserDB {
         EntityTransaction trans = em.getTransaction();
         try {
             trans.begin();
-            em.persist(em);
+            em.persist(user);
             trans.commit();
 
         } catch (Exception ex) {
@@ -60,7 +67,7 @@ public class UserDB {
         EntityTransaction trans = em.getTransaction();
         try {
             trans.begin();
-            em.merge(em);
+            em.merge(user);
             trans.commit();
 
         } catch (Exception ex) {
@@ -77,7 +84,7 @@ public void delete(User user) throws Exception{
         EntityTransaction trans = em.getTransaction();
         try {
             trans.begin();
-            em.remove(em.merge(em));
+            em.remove(em.merge(user));
             trans.commit();
 
         } catch (Exception ex) {

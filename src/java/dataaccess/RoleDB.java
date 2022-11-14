@@ -20,9 +20,9 @@ public class RoleDB {
 
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         try {
-            List<Role> notes = em.createNamedQuery("Role.findAll",
+            List<Role> roles = em.createNamedQuery("Role.findAll",
                     Role.class).getResultList();
-            return notes;
+            return roles;
         } finally {
             em.close();
         }
